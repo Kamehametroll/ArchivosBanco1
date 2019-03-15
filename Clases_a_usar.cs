@@ -16,13 +16,20 @@ namespace Mensajes
 
     public class Cliente
     {
-        public string codigo;
-        public string Nombres;
-        public string Apellidos;
-        public decimal? Balance;
+        string codigo;
+        string nombres;
+        string apellidos;
+        decimal balance;
+        string cedula;
+
+        public string Codigo { get => codigo; set => codigo = value; }
+        public string Nombres { get => nombres; set => nombres = value; }
+        public string Apellidos { get => apellidos; set => apellidos = value; }
+        public decimal Balance { get => balance; set => balance = value; }
+        public string Cedula { get => cedula; set => cedula = value; }
     }
 
-    public enum TipoPedido {transaccion, retiro, deposito, datosPersonales}
+    public enum TipoPedido {transferencia, retiro, deposito, datosPersonales}
     public enum TipoRespuesta {confimacion, DatosPersonales}
 
     public class Pedido
@@ -37,37 +44,51 @@ namespace Mensajes
 
     #region Pedidos
 
-    public class Transaccion : Pedido
+    public class Transferencia : Pedido
     {
-        Transaccion()
+        Transferencia()
         {
             tipo = (TipoPedido)0;
         }
-        public Cliente cuentaOrigen;
-        public Cliente cuentaDestino;
-        public decimal monto;
-        public DateTime fecha;
+        Cliente cuentaOrigen;
+        Cliente cuentaDestino;
+        decimal monto;
+        DateTime fecha;
 
+        public Cliente CuentaOrigen { get => cuentaOrigen; set => cuentaOrigen = value; }
+        public Cliente CuentaDestino { get => cuentaDestino; set => cuentaDestino = value; }
+        public decimal Monto { get => monto; set => monto = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
     }
-    public class retiro : Pedido
+
+    public class Retiro : Pedido
     {
-        retiro()
+        Retiro()
         {
             tipo = (TipoPedido)1;
         }
-        public Cliente cuenta;
-        public decimal monto;
-        public DateTime fecha;
+        Cliente cuenta;
+        decimal monto;
+        DateTime fecha;
+
+        public Cliente Cuenta { get => cuenta; set => cuenta = value; }
+        public decimal Monto { get => monto; set => monto = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
     }
+
     public class Deposito : Pedido
     {
         Deposito()
         {
             tipo = (TipoPedido)2;
         }
-        public Cliente cuenta;
-        public decimal monto;
-        public DateTime fecha;
+        Cliente cuenta;
+        decimal monto;
+        DateTime fecha;
+
+        public Cliente Cuenta { get => cuenta; set => cuenta = value; }
+        public decimal Monto { get => monto; set => monto = value; }
+        public DateTime Fecha { get => fecha; set => fecha = value; }
     }
     public class RequestDatosPersonales : Pedido
     {
