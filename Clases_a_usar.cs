@@ -16,83 +16,64 @@ namespace Mensajes
 
     public class Cliente
     {
-        string codigo;
-        string nombres;
-        string apellidos;
-        decimal balance;
-        string cedula;
-
-        public string Codigo { get => codigo; set => codigo = value; }
-        public string Nombres { get => nombres; set => nombres = value; }
-        public string Apellidos { get => apellidos; set => apellidos = value; }
-        public decimal Balance { get => balance; set => balance = value; }
-        public string Cedula { get => cedula; set => cedula = value; }
+        public string cedula;
+        public string codigo;
+        public string Nombres;
+        public string Apellidos;
+        public decimal? Balance;
     }
 
-    public enum TipoPedido {transferencia, retiro, deposito, datosPersonales}
+    public enum TipoPedido {transaccion, retiro, deposito, datosPersonales}
     public enum TipoRespuesta {confimacion, DatosPersonales}
 
     public class Pedido
     {
-        public TipoPedido tipo { get; internal set; }
+        public TipoPedido tipo { get; set; }
+        public decimal monto;
+        public DateTime fecha;
     }
 
     public class Respuesta
     {
-        public TipoRespuesta tipo { get; internal set; }
+        public TipoRespuesta tipo { get; set; }
     }
 
     #region Pedidos
 
-    public class Transferencia : Pedido
+    public class Transaccion : Pedido
     {
-        Transferencia()
+        public Transaccion()
         {
             tipo = (TipoPedido)0;
         }
-        Cliente cuentaOrigen;
-        Cliente cuentaDestino;
-        decimal monto;
-        DateTime fecha;
-
-        public Cliente CuentaOrigen { get => cuentaOrigen; set => cuentaOrigen = value; }
-        public Cliente CuentaDestino { get => cuentaDestino; set => cuentaDestino = value; }
-        public decimal Monto { get => monto; set => monto = value; }
-        public DateTime Fecha { get => fecha; set => fecha = value; }
+        public Cliente cuentaOrigen;
+        public Cliente cuentaDestino;
     }
-
     public class Retiro : Pedido
     {
-        Retiro()
+        public Retiro()
         {
             tipo = (TipoPedido)1;
         }
-        Cliente cuenta;
-        decimal monto;
-        DateTime fecha;
-
-        public Cliente Cuenta { get => cuenta; set => cuenta = value; }
-        public decimal Monto { get => monto; set => monto = value; }
-        public DateTime Fecha { get => fecha; set => fecha = value; }
+        public Cliente cuenta;
     }
-
     public class Deposito : Pedido
     {
-        Deposito()
+        public Deposito(Cliente cuenta)
         {
             tipo = (TipoPedido)2;
+            this.cuenta = cuenta;
         }
-        Cliente cuenta;
-        decimal monto;
-        DateTime fecha;
-
-        public Cliente Cuenta { get => cuenta; set => cuenta = value; }
-        public decimal Monto { get => monto; set => monto = value; }
-        public DateTime Fecha { get => fecha; set => fecha = value; }
+        public Deposito()
+        {
+            tipo = (TipoPedido)2;
+            cuenta = new Cliente();
+        }
+        public Cliente cuenta;
     }
     public class RequestDatosPersonales : Pedido
     {
-        RequestDatosPersonales()
+        public RequestDatosPersonales()
         {
             tipo = (TipoPedido)3;
         }
@@ -104,16 +85,23 @@ namespace Mensajes
 
     public class Confirmacion : Respuesta
     {
-        Confirmacion()
+        public Confirmacion()
         {
             tipo = (TipoRespuesta)0;
         }
+        public Confirmacion(string mensaje, bool success)
+        {
+            tipo = (TipoRespuesta)0;
+            mensajeConfirmación = mensaje;
+            this.success = success;
+        }
         public string mensajeConfirmación { get; internal set; }
+        public bool success { get; internal set; }
     }
 
     public class ResponseDatosPersonales : Respuesta
     {
-        ResponseDatosPersonales()
+        public ResponseDatosPersonales()
         {
             tipo = (TipoRespuesta)1;
         }
